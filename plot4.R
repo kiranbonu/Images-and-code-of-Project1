@@ -1,0 +1,31 @@
+data <- read.csv.sql(file = 'household_power_consumption.txt',
+                     sep = ";",
+                     sql = "select * from file where Date = '1/2/2007'
+                     or Date = '2/2/2007'",
+                     header = TRUE)
+sam1 <- as.POSIXct(paste(data$Date,data$Time), format = "%d/%m/%Y %H:%M:%S")
+data$DT <- sam1
+
+
+png(filename = "plot4.png",width=480,height=480)
+par(mfrow = c(2,2))
+plot(data$DT,data$Global_active_power,type="n",xlab=" ",
+     ylab="Global Active Power")
+lines(data$DT,data$Global_active_power)
+
+plot(data$DT,data$Voltage, type="n",xlab="datetime",
+     ylab="Voltage")
+lines(data$DT,data$Voltage)
+
+plot(data$DT,data$Sub_metering_1,type="n",xlab=" ",
+     ylab="Energy sub meeting")
+lines(data$DT,data$Sub_metering_1)
+lines(data$DT,data$Sub_metering_2,col="Red")
+lines(data$DT,data$Sub_metering_3,col="blue")
+legend("topright",c('Sub_metering_1','Sub_metering_2','Sub_metering_3'),
+       lty=1, col=c('black','orangered','blue'))
+
+plot(data$DT,data$Global_reactive_power, type="n",xlab="datetime",
+     ylab="Global_reactive_Power")
+lines(data$DT,data$Global_reactive_power)
+dev.off()
